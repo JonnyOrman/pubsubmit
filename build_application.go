@@ -3,21 +3,16 @@ package pubsubmit
 import "github.com/jonnyorman/fireworks"
 
 func BuildApplication[T any]() *fireworks.Application {
-	configuration := GenerateConfiguration("firesert-config")
+	configuration := GenerateConfiguration("pubsubmit-config")
 
-	pubSubBodyDeserialiser := fireworks.JsonDataDeserialiser[fireworks.PubSubBody]{}
+	bodyDeserialiser := fireworks.JsonDataDeserialiser[T]{}
 
 	ioutilReader := fireworks.IoutilReader{}
 
-	bodyReader := fireworks.NewGinPubSubBodyReader(
+	dataReader := NewGinRequestBodyReader[T](
 		ioutilReader,
-		pubSubBodyDeserialiser)
-
-	dataDeserialiser := fireworks.JsonDataDeserialiser[T]{}
-
-	dataReader := fireworks.NewHttpRequestBodyDataReader[T](
-		bodyReader,
-		dataDeserialiser)
+		bodyDeserialiser,
+	)
 
 	dataPublisher := NewPubSubDataPublisher[T](configuration)
 
