@@ -1,3 +1,7 @@
 package pubsubmit
 
-func run() {}
+func Run[T any]() {
+	application := BuildApplication[T]()
+
+	application.Run()
+}
