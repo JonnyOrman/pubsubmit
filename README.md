@@ -7,6 +7,10 @@ Very easy to use, create a working service by adding just one line of code to yo
 pubsubmit.Run()
 ```
 
+## Examples
+
+Try working examples of pubsubmit [here](https://github.com/JonnyOrman/pubsubmit-examples)
+
 ## Getting started
 
 Create a new Go project
