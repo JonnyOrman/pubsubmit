@@ -92,3 +92,9 @@ If a configuration value is provided in both `pubsubmit-config.json` and the env
 }
 ```
 then the project ID will be "config-project-id".
+
+## Running integration tests
+
+To run integration tests in Docker against a local Firebase emulator, run the following:
+- For typed documents: `make test-typed`
+- For untyped documents: `make test-untyped`

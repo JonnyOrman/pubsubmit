@@ -1,5 +1,5 @@
-//go:build integrationtyped
-// +build integrationtyped
+//go:build integrationuntyped
+// +build integrationuntyped
 
 package pubsubmit
 
@@ -78,5 +78,5 @@ func TestDataMatchingModelIsPublished(t *testing.T) {
 
 	assert.Equal(t, "abc", messageData["prop1"])
 	assert.Equal(t, float64(123), messageData["prop2"])
-	assert.Equal(t, nil, messageData["prop3"])
+	assert.Equal(t, "def", messageData["prop3"])
 }

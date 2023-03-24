@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  firebase-emulator:
+    build:
+      context: ../firebase-emulator
+      args:
+        - PROJECT=pubsubmit-untyped-integration-tests
+    environment:
+      PROJECT: pubsubmit-untyped-integration-tests
+    ports:
+      - "4000:4000"
+      - "8085:8085"
+  pubsubmit-untyped-app:
+    build:
+      context: ../../
+      dockerfile: ./tests/Dockerfile.app
+      args:
+        - GO_VERSION=1.20
+        - APP_TYPE=untyped
+    environment:
+      PORT: 3001
+      PROJECT_ID: pubsubmit-untyped-integration-tests
+      COLLECTION_NAME: TestCollection
+      OPERATION: create
+      PROJECT: pubsubmit-untyped-integration-tests
+      PUBSUB_EMULATOR_HOST: firebase-emulator:8085
+    ports:
+      - "3001:3001"
+    depends_on:
+      - firebase-emulator
+  pubsubmit-untyped-app-tests:
+    build:
+      context: ../../
+      dockerfile: ./tests/Dockerfile.tests
+      args:
+        - GO_VERSION=1.20
+    environment:
+      COLLECTION_NAME: TestCollection
+      OPERATION: create
+      PROJECT: pubsubmit-untyped-integration-tests
+      PUBSUB_EMULATOR_HOST: firebase-emulator:8085
+      APP_URL: http://pubsubmit-untyped-app:3001
+    depends_on:
+      - pubsubmit-untyped-app
+    command: --tags=integrationuntyped
