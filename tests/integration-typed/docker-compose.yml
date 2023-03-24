@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  firebase-emulator:
+    build:
+      context: ../firebase-emulator
+      args:
+        - PROJECT=pubsubmit-typed-integration-tests
+    environment:
+      PROJECT: pubsubmit-typed-integration-tests
+    ports:
+      - "4000:4000"
+      - "8085:8085"
+  pubsubmit-typed-app:
+    build:
+      context: ../../
+      dockerfile: ./tests/Dockerfile.app
+      args:
+        - GO_VERSION=1.20
+        - APP_TYPE=typed
+    environment:
+      PORT: 3001
+      PROJECT_ID: pubsubmit-typed-integration-tests
+      COLLECTION_NAME: TestCollection
+      OPERATION: create
+      PROJECT: pubsubmit-typed-integration-tests
+      PUBSUB_EMULATOR_HOST: firebase-emulator:8085
+    ports:
+      - "3001:3001"
+    depends_on:
+      - firebase-emulator
+  pubsubmit-typed-app-tests:
+    build:
+      context: ../../
+      dockerfile: ./tests/Dockerfile.tests
+      args:
+        - GO_VERSION=1.20
+    environment:
+      COLLECTION_NAME: TestCollection
+      OPERATION: create
+      PROJECT: pubsubmit-typed-integration-tests
+      PUBSUB_EMULATOR_HOST: firebase-emulator:8085
+      APP_URL: http://pubsubmit-typed-app:3001
+    depends_on:
+      - pubsubmit-typed-app
+    command: --tags=integrationtyped
