@@ -1,6 +1,9 @@
 package pubsubmit
 
-import "github.com/jonnyorman/fireworks"
+import (
+	"github.com/gin-contrib/cors"
+	"github.com/jonnyorman/fireworks"
+)
 
 func BuildApplication[T any]() *fireworks.Application {
 	configuration := GenerateConfiguration("pubsubmit-config")
@@ -26,6 +29,9 @@ func BuildApplication[T any]() *fireworks.Application {
 	routerBuilder.AddPost("/", requestHandler.Handle)
 
 	router := routerBuilder.Build()
+
+	corsConfig := cors.DefaultConfig()
+	router.Use(cors.New(corsConfig))
 
 	application := fireworks.NewApplication(router)
 
