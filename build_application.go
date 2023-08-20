@@ -31,6 +31,7 @@ func BuildApplication[T any]() *fireworks.Application {
 	router := routerBuilder.Build()
 
 	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowAllOrigins = true
 	router.Use(cors.New(corsConfig))
 
 	application := fireworks.NewApplication(router)
