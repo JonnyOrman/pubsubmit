@@ -1,5 +1,5 @@
 package pubsubmit
 
-func Run() {
-	RunTyped[map[string]interface{}]()
+func Run(allowedOrigins []string) {
+	RunTyped[map[string]interface{}](allowedOrigins)
 }

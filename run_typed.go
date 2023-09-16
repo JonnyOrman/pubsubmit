@@ -1,7 +1,7 @@
 package pubsubmit
 
-func RunTyped[T any]() {
-	application := BuildApplication[T]()
+func RunTyped[T any](allowedOrigins []string) {
+	application := BuildApplication[T](allowedOrigins)
 
 	application.Run()
 }

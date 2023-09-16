@@ -5,7 +5,7 @@ import (
 	"github.com/jonnyorman/fireworks"
 )
 
-func BuildApplication[T any]() *fireworks.Application {
+func BuildApplication[T any](allowedOrigins []string) *fireworks.Application {
 	configuration := GenerateConfiguration("pubsubmit-config")
 
 	bodyDeserialiser := fireworks.JsonDataDeserialiser[T]{}
@@ -31,7 +31,7 @@ func BuildApplication[T any]() *fireworks.Application {
 	router := routerBuilder.Build()
 
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowAllOrigins = true
+	corsConfig.AllowOrigins = allowedOrigins
 	router.Use(cors.New(corsConfig))
 
 	application := fireworks.NewApplication(router)
